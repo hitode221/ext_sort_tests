@@ -96,5 +96,5 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 			merge_files(last_file, generate_name(plus + 1000), generate_name(result));
 		}
 	}
-	rename(generate_name(result).c_str(), result_file_name);
+	rename(generate_name(result).c_str(), result_file_name.c_str());
 }
