@@ -4,7 +4,7 @@
 #include <fstream>
 
 SCENARIO("sort", "[sort]") {
-	ext_sort("random.txt", 256);
+	ext_sort("random.txt", 1);
 	std::ifstream expected("expected.txt");
 	std::ifstream output("result.txt");
 	std::string first, second;
