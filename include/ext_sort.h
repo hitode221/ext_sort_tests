@@ -53,7 +53,7 @@ void merge_files(std::string first_name, std::string second_name, std::string re
 	remove(second_name.c_str());
 }
 
-void ext_sort(std::string file_name, size_t size_of_block) {
+void ext_sort(std::string file_name, std::string result_file_name, size_t size_of_block) {
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
 	size_t i = 0, size = 0;
@@ -62,20 +62,17 @@ void ext_sort(std::string file_name, size_t size_of_block) {
 	int j = 0;
 	while (!fin.eof()) {
 		size = 0;
-		std::cout << generate_name(i) << std::endl;
 		std::ofstream fout(generate_name(i));
 		do {
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
 			size += sizeof(temp);
-			std::cout << j++ << " ";
 		} while ((sizeof(std::vector<man>) + (sizeof(man) * people.size())) < size_of_block);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); j++)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
 		i++;
-		std::cout << std::endl << size << std::endl;
 		people.clear();
 	}
 	bool flag = false;
@@ -84,25 +81,20 @@ void ext_sort(std::string file_name, size_t size_of_block) {
 	for (size_t a = i, plus = 0; a != 1; a /= 2, plus += 1000) {
 		for (size_t j = 0; j < a - 1; ++j) {
 			merge_files(generate_name(j + plus), generate_name(j++ + plus), generate_name(j / 2 + plus + 1000));
-			std::cout << j + plus << " + " << j - 1 + plus << " Всего:" << a << std::endl;
-			std::cout << "remove " << generate_name(j + plus).c_str() << " and " << (generate_name(j - 1 + plus).c_str()) << std::endl;
 		}
 		if (flag) {
 			merge_files(last_file, generate_name(1000 + plus), "temp.txt");
 			rename("temp.txt", generate_name(1000 + plus).c_str());
-			std::cout << 1000 + plus << " + " << last_file << " = " << " Всего:" << a << std::endl;
 			flag = false;
 		}
 		if (a % 2 == 1) {
 			flag = true;
 			last_file = generate_name(a - 1 + plus);
-			std::cout << "Остался " << a - 1 + plus << std::endl;
 		}
 		result = ((a == 3) ? 1 : 0) + plus + 1000;
 		if (a == 3) {
 			merge_files(last_file, generate_name(plus + 1000), generate_name(result));
 		}
 	}
-	std::cout << result << std::endl;
-	rename(generate_name(result).c_str(), "result.txt");
+	rename(generate_name(result).c_str(), result_file_name);
 }
