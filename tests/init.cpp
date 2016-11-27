@@ -7,10 +7,8 @@ SCENARIO("sort 8mb", "[sort]") {
 	ext_sort("8", "sort_8.txt", 1);
 	std::ifstream expected("sort8.txt");
 	std::ifstream output("sort_8.txt");
-	std::string first, second;
+	/*std::string first, second;
 	bool flag = true;
-	REQUIRE(expected);
-	REQUIRE(output);
 	while (expected || output) {
 		std::getline(expected, first);
 		std::getline(output, second);
@@ -19,5 +17,14 @@ SCENARIO("sort 8mb", "[sort]") {
 			break;
 		}
 	}
-	REQUIRE(flag);
+	REQUIRE(flag);*/
+	std::string temp;
+	size_t t = 0;
+	std::getline(output, temp);
+	while(!output.eof()) {
+		std::getline(output, temp);
+		++t;
+	}
+	REQUIRE(t == 422492+1);
+  	output.close();
 }
