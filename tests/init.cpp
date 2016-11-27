@@ -18,7 +18,7 @@ SCENARIO("sort 8mb", "[sort]") {
 }
 
 SCENARIO("sort 15mb", "[sort]") {
-	ext_sort("15", "sort_15.txt", 1);
+	ext_sort("15", "sort_15.txt", 4);
 	std::ifstream output("sort_15.txt");
 	std::string temp;
 	size_t t = 0;
@@ -32,7 +32,7 @@ SCENARIO("sort 15mb", "[sort]") {
 }
 
 SCENARIO("sort 32mb", "[sort]") {
-	ext_sort("32", "sort_32.txt", 1);
+	ext_sort("32", "sort_32.txt", 17);
 	std::ifstream output("sort_32.txt");
 	std::string temp;
 	size_t t = 0;
