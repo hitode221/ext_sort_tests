@@ -1,4 +1,5 @@
 #pragma once
+#include <queue>
 #include <fstream>
 #include <vector>
 #include <string>
@@ -9,8 +10,13 @@
 #include <sstream>
 
 struct man {
-	std::string last_name, first_name;
+	std::string last_name, first_name, file_name;
 	size_t year;
+	std::ifstream* file;
+	bool operator < (const man& b) const
+	{
+		return (last_name > b.last_name);
+	}
 };
 bool Sort(man a, man b) {
 	return (a.last_name < b.last_name);
@@ -21,6 +27,34 @@ std::string generate_name(size_t i) {
 	ss << i << ".txt";
 	std::string result = ss.str();
 	return result;
+}
+void merge_all_files(size_t number_of_files, std::string result_name) {
+	std::ofstream result(result_name);
+	std::priority_queue<man> people;
+	man temp;
+	int u = 0;
+	for (size_t i = 0; i < number_of_files; ++i) {
+		temp.file = new std::ifstream(generate_name(i));
+		temp.file_name = generate_name(i);
+		*temp.file >> temp.last_name >> temp.first_name >> temp.year;
+		people.push(temp);
+	}
+	man temp1;
+	while (!people.empty()) {
+		temp1 = people.top();
+		people.pop();
+		result << temp1.last_name << " " << temp1.first_name << " " << temp1.year << std::endl;
+		if (*temp1.file) {
+			(*temp1.file) >> temp1.last_name >> temp1.first_name >> temp1.year;
+			if (*temp1.file) {
+				people.push(temp1);
+			}
+			else {
+				(*temp1.file).close();
+				remove(temp1.file_name.c_str());
+			}
+		}
+	}
 }
 
 void merge_files(std::string first_name, std::string second_name, std::string result_file) {
@@ -53,56 +87,29 @@ void merge_files(std::string first_name, std::string second_name, std::string re
 	remove(second_name.c_str());
 }
 
-void ext_sort(std::string file_name, size_t size_of_block) {
+void ext_sort(std::string file_name, std::string result_file_name, size_t size_of_block) {
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
-	size_t i = 0, size = 0;
+	size_t i = 0, size = 0, size_of_block_ = size_of_block  * 1024 * 1024;
 	std::vector<man> people;
 	man temp;
 	int j = 0;
 	while (!fin.eof()) {
 		size = 0;
-		std::cout << generate_name(i) << std::endl;
 		std::ofstream fout(generate_name(i));
 		do {
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
 			size += sizeof(temp);
-			std::cout << j++ << " ";
-		} while ((sizeof(std::vector<man>) + (sizeof(man) * people.size())) < size_of_block);
+		} while ((sizeof(std::vector<man>) + (sizeof(man) * people.size())) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); j++)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
 		i++;
-		std::cout << std::endl << size << std::endl;
 		people.clear();
+		fout.close();
 	}
-	bool flag = false;
-	size_t result = 0;
-	std::string last_file, result_file;
-	for (size_t a = i, plus = 0; a != 1; a /= 2, plus += 1000) {
-		for (size_t j = 0; j < a - 1; ++j) {
-			merge_files(generate_name(j + plus), generate_name(j++ + plus), generate_name(j / 2 + plus + 1000));
-			std::cout << j + plus << " + " << j - 1 + plus << " Всего:" << a << std::endl;
-			std::cout << "remove " << generate_name(j + plus).c_str() << " and " << (generate_name(j - 1 + plus).c_str()) << std::endl;
-		}
-		if (flag) {
-			merge_files(last_file, generate_name(1000 + plus), "temp.txt");
-			rename("temp.txt", generate_name(1000 + plus).c_str());
-			std::cout << 1000 + plus << " + " << last_file << " = " << " Всего:" << a << std::endl;
-			flag = false;
-		}
-		if (a % 2 == 1) {
-			flag = true;
-			last_file = generate_name(a - 1 + plus);
-			std::cout << "Остался " << a - 1 + plus << std::endl;
-		}
-		result = ((a == 3) ? 1 : 0) + plus + 1000;
-		if (a == 3) {
-			merge_files(last_file, generate_name(plus + 1000), generate_name(result));
-		}
-	}
-	std::cout << result << std::endl;
-	rename(generate_name(result).c_str(), "result.txt");
+	fin.close();
+	merge_all_files(i, result_file_name);	
 }
