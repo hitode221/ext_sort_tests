@@ -5,19 +5,7 @@
 
 SCENARIO("sort 8mb", "[sort]") {
 	ext_sort("8", "sort_8.txt", 1);
-	std::ifstream expected("sort8.txt");
 	std::ifstream output("sort_8.txt");
-	/*std::string first, second;
-	bool flag = true;
-	while (expected || output) {
-		std::getline(expected, first);
-		std::getline(output, second);
-		if (first != second) {
-			flag = false;
-			break;
-		}
-	}
-	REQUIRE(flag);*/
 	std::string temp;
 	size_t t = 0;
 	std::getline(output, temp);
@@ -28,3 +16,32 @@ SCENARIO("sort 8mb", "[sort]") {
 	REQUIRE(t == 422492+1);
   	output.close();
 }
+
+SCENARIO("sort 15mb", "[sort]") {
+	ext_sort("15", "sort_15.txt", 1);
+	std::ifstream output("sort_15.txt");
+	std::string temp;
+	size_t t = 0;
+	std::getline(output, temp);
+	while(!output.eof()) {
+		std::getline(output, temp);
+		++t;
+	}
+	REQUIRE(t == 792011+1);
+  	output.close();
+}
+
+SCENARIO("sort 32mb", "[sort]") {
+	ext_sort("32", "sort_32.txt", 1);
+	std::ifstream output("sort_32.txt");
+	std::string temp;
+	size_t t = 0;
+	std::getline(output, temp);
+	while(!output.eof()) {
+		std::getline(output, temp);
+		++t;
+	}
+	REQUIRE(t == 1637032+1);
+  	output.close();
+}
+
