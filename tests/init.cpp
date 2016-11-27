@@ -9,6 +9,8 @@ SCENARIO("sort 8mb", "[sort]") {
 	std::ifstream output("sort_8.txt");
 	std::string first, second;
 	bool flag = true;
+	REQUIRE(expected);
+	REQUIRE(output);
 	while (expected || output) {
 		std::getline(expected, first);
 		std::getline(output, second);
