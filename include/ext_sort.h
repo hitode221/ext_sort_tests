@@ -15,11 +15,11 @@ struct man {
 	std::ifstream* file;
 	bool operator < (const man& b) const
 	{
-		return (last_name > b.last_name);
+		return (first_name > b.first_name);
 	}
 };
 bool Sort(man a, man b) {
-	return (a.last_name < b.last_name);
+	return (a.first_name < b.first_name);
 }
 
 std::string generate_name(size_t i) {
@@ -92,8 +92,9 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 	if (!fin.is_open()) return;
 	size_t i = 0, size = 0, size_of_block_ = size_of_block  * 1024 * 1024;
 	std::vector<man> people;
+	memory_ = size_of_block_/(2 * sizeof(std::string) + sizeof(size_t));
+	str.reserve(memory_);
 	man temp;
-	int j = 0;
 	while (!fin.eof()) {
 		size = 0;
 		std::ofstream fout(generate_name(i));
@@ -102,7 +103,7 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
 			size += sizeof(temp);
-		} while ((sizeof(std::vector<man>) + (sizeof(man) * people.size())) < size_of_block_);
+		} while ((sizeof(std::vector<man>) + ((2 * sizeof(std::string) + sizeof(size_t))* people.size())) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); j++)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
