@@ -101,7 +101,7 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
 			size += sizeof(temp);
-		} while ((sizeof(std::vector<man>) + 102 * people.size()) < size_of_block_);
+		} while ((sizeof(std::vector<man>) + (3*sizeof(std::string) + sizeof(size_t) + sizeof(std::ifstream*) * people.size()) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); j++)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
