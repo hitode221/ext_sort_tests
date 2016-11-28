@@ -92,7 +92,7 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 	if (!fin.is_open()) return;
 	size_t i = 0, size = 0, size_of_block_ = size_of_block  * 1024 * 1024;
 	std::vector<man> people;
-	memory_ = size_of_block_/(2 * sizeof(std::string) + sizeof(size_t));
+	size_t memory_ = size_of_block_/(2 * sizeof(std::string) + sizeof(size_t));
 	str.reserve(memory_);
 	man temp;
 	while (!fin.eof()) {
