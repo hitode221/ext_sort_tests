@@ -92,18 +92,19 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 	if (!fin.is_open()) return;
 	size_t i = 0, size = 0, size_of_block_ = size_of_block  * 1024 * 1024;
 	std::vector<man> people;
-	size_t memory_ = size_of_block_/(2 * sizeof(std::string) + sizeof(size_t));
-	str.reserve(memory_);
+	size_t memory_ = size_of_block_/102;
+	people.reserve(memory_);
 	man temp;
 	while (!fin.eof()) {
 		size = 0;
 		std::ofstream fout(generate_name(i));
-		do {
+		for(int k = 0; k < memory_; k++) {
 			if (fin.eof()) break;
+			if (k >= people.size()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
 			size += sizeof(temp);
-		} while ((sizeof(std::vector<man>) + ((2 * sizeof(std::string) + sizeof(size_t))* people.size())) < size_of_block_);
+		} 
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); j++)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
