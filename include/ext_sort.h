@@ -110,7 +110,7 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 		do {
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
-			people.insert(people.end(), temp);
+			people.push_back(temp);
 			size += sizeof(temp);
 		} while ((sizeof(std::vector<man>) + sizeof(man) * (people.size()+1)) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
