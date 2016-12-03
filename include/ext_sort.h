@@ -29,15 +29,15 @@ std::string generate_name(size_t i) {
 
 void merge(size_t number_of_files_, std::string result_name) {
 	size_t number = number_of_files_;
-	std::ofstream result(result_name);
-	std::vector<std::ifstream*> files;
+	std::fstream result(result_name);
+	std::vector<std::fstream*> files;
 	std::vector<man> people;
 	files.reserve(number);
 	people.reserve(number);
 	man temp_m;
-	std::ifstream* temp_i;
+	std::fstream* temp_i;
 	for (size_t i = 0; i < number; ++i) {
-		temp_i = new std::ifstream(generate_name(i));
+		temp_i = new std::fstream(generate_name(i));
 		files.push_back(temp_i);
 		*(files[i]) >> temp_m.last_name >> temp_m.first_name >> temp_m.year;
 		people.push_back(temp_m);
@@ -67,7 +67,7 @@ void merge(size_t number_of_files_, std::string result_name) {
 }
 
 void ext_sort(std::string && file_name, std::string && result_file_name, size_t && size_of_block) {
-	std::ifstream fin(file_name);
+	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
 	size_t number_of_files = 0, size_of_block_ = size_of_block * 1024 * 1024;
 	size_t memory = size_of_block_ / 105;
@@ -75,7 +75,7 @@ void ext_sort(std::string && file_name, std::string && result_file_name, size_t 
 	people.reserve(memory);
 	man temp;
 	while (!fin.eof()) {
-		std::ofstream fout(generate_name(number_of_files));
+		std::fstream fout(generate_name(number_of_files));
 		for (size_t i = 0; i < memory; ++i){
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
