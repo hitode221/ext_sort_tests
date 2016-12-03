@@ -29,15 +29,15 @@ std::string generate_name(size_t i) {
 
 void merge(size_t number_of_files_, std::string result_name) {
 	size_t number = number_of_files_;
-	std::fstream result(result_name);
-	std::vector<std::fstream*> files;
+	std::ofstream result(result_name);
+	std::vector<std::ifstream*> files;
 	std::vector<man> people;
 	files.reserve(number);
 	people.reserve(number);
 	man temp_m;
-	std::fstream* temp_i;
+	std::ifstream* temp_i;
 	for (size_t i = 0; i < number; ++i) {
-		temp_i = new std::fstream(generate_name(i));
+		temp_i = new std::ifstream(generate_name(i));
 		files.push_back(temp_i);
 		*(files[i]) >> temp_m.last_name >> temp_m.first_name >> temp_m.year;
 		people.push_back(temp_m);
