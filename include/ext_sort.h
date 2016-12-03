@@ -105,7 +105,6 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 	std::vector<man> people;
 	man temp;
 	while (!fin.eof()) {
-		size = 0;
 		std::ofstream fout(generate_name(number_of_files));
 		do {
 			if (fin.eof()) break;
