@@ -13,9 +13,11 @@ struct man {
 	std::string last_name, first_name, file_name;
 	size_t year;
 	std::ifstream* file;
-	bool operator < (const man& b) const
-	{
-		return (first_name > b.first_name);
+	bool operator <(const man & data) const{
+		return  first_name < data.first_name;
+	}
+	bool operator<=(const man & data) const{
+		return  first_name <= data.first_name;
 	}
 };
 bool Sort(man a, man b) {
@@ -57,59 +59,67 @@ void merge_all_files(size_t number_of_files, std::string result_name) {
 	}
 }
 
-void merge_files(std::string first_name, std::string second_name, std::string result_file) {
-	std::fstream first(first_name), second(second_name);
-	std::ofstream result(result_file);
-	man temp1, temp2;
-	if (!first.eof()) first >> temp1.last_name >> temp1.first_name >> temp1.year;
-	if (!second.eof()) second >> temp2.last_name >> temp2.first_name >> temp2.year;
-	while (!first.eof() && !second.eof()) {
-		if (Sort(temp1, temp2)) {
-			result << temp1.last_name << " " << temp1.first_name << " " << temp1.year << std::endl;
-			first >> temp1.last_name >> temp1.first_name >> temp1.year;
+void merge(size_t number_of_files_, std::string result_name) {
+	size_t number = number_of_files_;
+	std::ofstream result(result_name);
+	std::vector<std::ifstream*> files;
+	std::vector<man> people;
+	files.reserve(number);
+	people.reserve(number);
+	man temp_m;
+	std::ifstream* temp_i;
+	for (size_t i = 0; i < number; ++i) {
+		temp_i = new std::ifstream(generate_name(i));
+		files.push_back(temp_i);
+		*(files[i]) >> temp_m.last_name >> temp_m.first_name >> temp_m.year;
+		people.push_back(temp_m);
+	}
+	while (number >= 1) {
+		size_t min_index = 0;
+		for (size_t i = 1; i < number; ++i) {
+			if (people[i] < people[min_index]) {
+				min_index = i;
+			}
 		}
-		else {
-			result << temp2.last_name << " " << temp2.first_name << " " << temp2.year << std::endl;
-			second >> temp2.last_name >> temp2.first_name >> temp2.year;
+		result << people[min_index].last_name << " " << people[min_index].first_name << " " << people[min_index].year << std::endl;
+		(*files[min_index]) >> people[min_index].last_name >> people[min_index].first_name >> people[min_index].year;
+		if (!(*files[min_index])) {
+			(*files[min_index]).close();
+			files.erase(files.begin() + min_index);
+			people.erase(people.begin() + min_index);
+			--number;
 		}
 	}
-	while (!first.eof()) {
-		result << temp1.last_name << " " << temp1.first_name << " " << temp1.year << std::endl;
-		first >> temp1.last_name >> temp1.first_name >> temp1.year;
+	files.clear();
+	people.clear();
+	result.close();
+	for (size_t i = 0; i < number_of_files_; ++i) {
+		std::remove(generate_name(i).c_str());
 	}
-	while (!second.eof()) {
-		result << temp2.last_name << " " << temp2.first_name << " " << temp2.year << std::endl;
-		second >> temp2.last_name >> temp2.first_name >> temp2.year;
-	}
-	second.close();
-	first.close();
-	remove(first_name.c_str());
-	remove(second_name.c_str());
 }
 
 void ext_sort(std::string file_name, std::string result_file_name, size_t size_of_block) {
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
-	size_t i = 0, size = 0, size_of_block_ = size_of_block  * 1024 * 1024;
+	size_t number_of_files = 0, size = 0, size_of_block_ = size_of_block * 1024 * 1024;
 	std::vector<man> people;
 	man temp;
-	size_t size__ = 3*sizeof(std::string) + sizeof(size_t) + sizeof(std::ifstream*);
 	while (!fin.eof()) {
 		size = 0;
-		std::ofstream fout(generate_name(i));
+		std::ofstream fout(generate_name(number_of_files));
 		do {
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
 			size += sizeof(temp);
-		} while ((sizeof(std::vector<man>) + size__ * people.size()) < size_of_block_);
+		} while ((sizeof(std::vector<man>) + sizeof(man) * (people.size()+1)) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); j++)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
-		i++;
+		++number_of_files;
 		people.clear();
 		fout.close();
 	}
 	fin.close();
-	merge_all_files(i, result_file_name);	
+	merge(number_of_files, result_file_name);
 }
