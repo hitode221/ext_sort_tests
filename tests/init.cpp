@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-/*SCENARIO("sort 8mb", "[sort]") {
+SCENARIO("sort 8mb", "[sort]") {
 	ext_sort("8", "sort_8.txt", 1);
 	std::ifstream output("sort_8.txt");
 	std::string temp;
@@ -29,11 +29,11 @@ SCENARIO("sort 15mb", "[sort]") {
 	}
 	REQUIRE(t == 792011+1);
   	output.close();
-}*/
+}
 
 SCENARIO("sort 32mb", "[sort]") {
 	ext_sort("32", "sort_32.txt", 17);
-	/*std::ifstream output("sort_32.txt");
+	std::ifstream output("sort_32.txt");
 	std::string temp;
 	size_t t = 0;
 	std::getline(output, temp);
@@ -42,6 +42,6 @@ SCENARIO("sort 32mb", "[sort]") {
 		++t;
 	}
 	REQUIRE(t == 1637032+1);
-  	output.close();*/
+  	output.close();
 }
 
