@@ -75,7 +75,7 @@ void ext_sort(std::string && file_name, std::string && result_file_name, size_t 
 	people.reserve(memory);
 	man temp;
 	while (!fin.eof()) {
-		std::fstream fout(generate_name(number_of_files));
+		std::ofstream fout(generate_name(number_of_files));
 		for (size_t i = 0; i < memory; ++i){
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
