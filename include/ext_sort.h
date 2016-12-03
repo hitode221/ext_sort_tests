@@ -77,13 +77,13 @@ void ext_sort(std::string && file_name, std::string && result_file_name, size_t 
 	man temp;
 	while (!fin.eof()) {
 		std::ofstream fout(generate_name(number_of_files));
-		for (size_t i = 0; i < memory; i++){
+		for (size_t i = 0; i < memory; ++i){
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.push_back(temp);
 		} //while ((sizeof(std::vector<man>) + sizeof(man) * (people.size()+1)) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
-		for (size_t j = 0; j < people.size(); j++)
+		for (size_t j = 0; j < people.size(); ++j)
 			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
 		++number_of_files;
 		people.clear();
