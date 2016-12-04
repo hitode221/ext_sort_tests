@@ -43,7 +43,7 @@ void merge_all_files(size_t number_of_files, std::string result_name) {
 	while (!people.empty()) {
 		temp1 = people.top();
 		people.pop();
-		result << temp1.last_name << " " << temp1.first_name << " " << temp1.year << std::endl;
+		result << temp1.last_name << " " << temp1.first_name << " " << temp1.year << "\n";
 		if (*temp1.file) {
 			(*temp1.file) >> temp1.last_name >> temp1.first_name >> temp1.year;
 			if (*temp1.file) {
@@ -90,10 +90,9 @@ void merge_files(std::string first_name, std::string second_name, std::string re
 void ext_sort(std::string file_name, std::string result_file_name, size_t size_of_block) {
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
-	size_t i = 0, size = 0, size_of_block_ = size_of_block  * 1024 * 1024;
+	size_t i = 0,, size_of_block_ = size_of_block  * 1024 * 1024 / 2;
 	std::vector<man> people;
 	man temp;
-	size_t size__ = 3*sizeof(std::string) + sizeof(size_t) + sizeof(std::ifstream*);
 	while (!fin.eof()) {
 		size = 0;
 		std::ofstream fout(generate_name(i));
@@ -101,11 +100,10 @@ void ext_sort(std::string file_name, std::string result_file_name, size_t size_o
 			if (fin.eof()) break;
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.insert(people.end(), temp);
-			size += sizeof(temp);
-		} while ((sizeof(std::vector<man>) + size__ * people.size()) < size_of_block_);
+		} while ((sizeof(std::vector<man>) + sizeof(man) * (people.size()-1)) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
-		for (size_t j = 0; j < people.size(); j++)
-			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
+		for (size_t j = 0; j < people.size(); ++j)
+			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << "\n";
 		i++;
 		people.clear();
 		fout.close();
