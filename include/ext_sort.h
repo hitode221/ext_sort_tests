@@ -49,7 +49,7 @@ void merge(size_t number_of_files_, std::string result_name) {
 				min_index = i;
 			}
 		}
-		result << people[min_index].last_name << " " << people[min_index].first_name << " " << people[min_index].year << std::endl;
+		result << people[min_index].last_name << " " << people[min_index].first_name << " " << people[min_index].year << "\n";
 		(*files[min_index]) >> people[min_index].last_name >> people[min_index].first_name >> people[min_index].year;
 		if (!(*files[min_index])) {
 			(*files[min_index]).close();
