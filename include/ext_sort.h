@@ -90,11 +90,10 @@ void merge_files(std::string first_name, std::string second_name, std::string re
 void ext_sort(std::string file_name, std::string result_file_name, size_t size_of_block) {
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
-	size_t i = 0,, size_of_block_ = size_of_block  * 1024 * 1024 / 2;
+	size_t i = 0, size_of_block_ = size_of_block  * 1024 * 1024 / 2;
 	std::vector<man> people;
 	man temp;
 	while (!fin.eof()) {
-		size = 0;
 		std::ofstream fout(generate_name(i));
 		do {
 			if (fin.eof()) break;
