@@ -51,7 +51,7 @@ void merge(size_t number_of_files_, std::string result_name) {
 		}
 		result << people[min_index].last_name << " " << people[min_index].first_name << " " << people[min_index].year << "\n";
 		(*files[min_index]) >> people[min_index].last_name >> people[min_index].first_name >> people[min_index].year;
-		if ((*files[min_index]).eof()) {
+		if (!(*files[min_index])) {
 			(*files[min_index]).close();
 			files.erase(files.begin() + min_index);
 			people.erase(people.begin() + min_index);
@@ -74,12 +74,12 @@ void ext_sort(std::string && file_name, std::string && result_file_name, size_t 
 	std::vector<man> people;
 	people.reserve(memory);
 	man temp;
-	while (!fin.eof()) {
+	while (fin) {
 		std::ofstream fout(generate_name(number_of_files));
 		for (size_t i = 0; i < memory; ++i){
 			fin >> temp.last_name >> temp.first_name >> temp.year;
 			people.push_back(temp);
-			if (fin.eof()) break;
+			if (!fin) break;
 		} //while ((sizeof(std::vector<man>) + sizeof(man) * (people.size()+1)) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); ++j)
