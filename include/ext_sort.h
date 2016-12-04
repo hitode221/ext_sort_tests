@@ -83,7 +83,7 @@ void ext_sort(std::string && file_name, std::string && result_file_name, size_t 
 		} //while ((sizeof(std::vector<man>) + sizeof(man) * (people.size()+1)) < size_of_block_);
 		sort(people.begin(), people.end(), Sort);
 		for (size_t j = 0; j < people.size(); ++j)
-			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << std::endl;
+			fout << people[j].last_name << " " << people[j].first_name << " " << people[j].year << "\n";
 		++number_of_files;
 		people.clear();
 		fout.close();
