@@ -70,7 +70,7 @@ void ext_sort(std::string && file_name, std::string && result_file_name, size_t 
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
 	size_t number_of_files = 0, size_of_block_ = size_of_block * 1024 * 1024;
-	size_t memory = size_of_block_ / 105;
+	size_t memory = size_of_block_ /105/2;
 	std::vector<man> people;
 	people.reserve(memory);
 	man temp;
