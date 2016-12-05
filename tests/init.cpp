@@ -5,8 +5,9 @@
 #include <chrono>
 
 SCENARIO("sort 8mb", "[sort]") {
+	std::string in = "8", out = "sort_8.txt";
 	auto start_time = std::chrono::steady_clock::now();
-	ext_sort("8", "sort_8.txt", 1);
+	ext_sort(in, out, 1);
 	auto end_time = std::chrono::steady_clock::now();
 	auto elapsed_s = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 	std::cout << "8mb: " << elapsed_s.count() << " ms" << std::endl;
@@ -23,8 +24,9 @@ SCENARIO("sort 8mb", "[sort]") {
 }
 
 SCENARIO("sort 15mb", "[sort]") {
+	std::string in = "15", out = "sort_15.txt";
 	auto start_time = std::chrono::steady_clock::now();
-	ext_sort("15", "sort_15.txt", 4);
+	ext_sort(in, out, 4);
 	auto end_time = std::chrono::steady_clock::now();
 	auto elapsed_s = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 	std::cout << "15mb: " << elapsed_s.count() << " ms" << std::endl;
@@ -41,8 +43,9 @@ SCENARIO("sort 15mb", "[sort]") {
 }
 
 SCENARIO("sort 32mb", "[sort]") {
+	std::string in = "32", out = "sort_32.txt";
 	auto start_time = std::chrono::steady_clock::now();
-	ext_sort("32", "sort_32.txt", 17);
+	ext_sort(in, out, 17);
 	auto end_time = std::chrono::steady_clock::now();
 	auto elapsed_s = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 	std::cout << "32mb: " << elapsed_s.count() << " ms" << std::endl;
