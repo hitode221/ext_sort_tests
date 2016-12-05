@@ -66,11 +66,11 @@ void merge(size_t number_of_files_, std::string result_name) {
 	}
 }
 
-void ext_sort(std::string && file_name, std::string && result_file_name, size_t && size_of_block) {
+void ext_sort(std::string & file_name, std::string & result_file_name, size_t size_of_block) {
 	std::fstream fin(file_name);
 	if (!fin.is_open()) return;
 	size_t number_of_files = 0, size_of_block_ = size_of_block * 1024 * 1024;
-	size_t memory = size_of_block_ /105/2;
+	size_t memory = size_of_block_ / 60;
 	std::vector<man> people;
 	people.reserve(memory);
 	man temp;
